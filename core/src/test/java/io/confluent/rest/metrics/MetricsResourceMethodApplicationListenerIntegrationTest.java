@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
@@ -109,7 +110,11 @@ public class MetricsResourceMethodApplicationListenerIntegrationTest {
             HttpServletResponse response
         ) throws IOException {
           handledException = (Throwable) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
-          super.handle(target, baseRequest, request, response);
+          try {
+            super.handle(target, baseRequest, request, response);
+          } catch (ServletException e) {
+            throw new RuntimeException(e);
+          }
         }
       });
     }
